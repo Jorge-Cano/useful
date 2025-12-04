@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Code Design Blog</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for modern feel and smooth transitions */
+        :root {
+            --primary-color: #3b82f6; /* Tailwind blue-500 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind slate-50 */
+        }
+        .header-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Custom transition for mobile menu */
+        .mobile-nav {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-nav.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header (Fixed at the top) -->
+    <header id="main-header" class="header-shadow bg-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Site Title -->
+                <a href="#home" onclick="navigate('home')" class="text-2xl font-bold text-gray-800 tracking-tight" data-tour-id="site-logo">
+                    IntelliCode
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#home" onclick="navigate('home')" class="text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out font-medium" data-tour-id="nav-home">Home</a>
+                    <a href="#packages" onclick="navigate('packages')" class="text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out font-medium" data-tour-id="nav-packages">Educational Packages</a>
+                    <a href="#checkout" onclick="navigate('checkout')" class="text-white bg-blue-600 px-3 py-1 rounded-lg hover:bg-blue-700 transition duration-150 ease-in-out text-sm" data-tour-id="nav-checkout">Checkout</a>
+                </nav>
+
+                <!-- Mobile Menu Button (Hamburger) -->
+                <button id="hamburger-button" class="md:hidden text-gray-600 hover:text-blue-600 p-2 rounded-lg transition duration-150" data-tour-id="nav-toggle">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Panel (Hidden by default) -->
+    <div id="mobile-menu" class="mobile-nav fixed inset-y-0 left-0 w-64 bg-white z-40 p-4 pt-16 md:hidden shadow-xl">
+        <nav class="flex flex-col space-y-4">
+            <a href="#home" onclick="navigate('home')" class="text-gray-700 hover:text-blue-600 text-lg font-medium py-2 border-b border-gray-100" data-tour-id="mobile-nav-home">Home</a>
+            <a href="#packages" onclick="navigate('packages')" class="text-gray-700 hover:text-blue-600 text-lg font-medium py-2 border-b border-gray-100" data-tour-id="mobile-nav-packages">Educational Packages</a>
+            <a href="#checkout" onclick="navigate('checkout')" class="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-150 ease-in-out text-base text-center" data-tour-id="mobile-nav-checkout">Checkout</a>
+        </nav>
+    </div>
+    <!-- Overlay for mobile menu -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-300 z-30 md:hidden"></div>
+
+    <!-- Main Content Area -->
+    <main id="app-container" class="flex-grow max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8">
+        <!-- Content will be rendered here by JavaScript -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-8 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-400">
+            &copy; 2025 IntelliCode Blog. Designed for modern web applications.
+        </div>
+    </footer>
+
+    <script>
+        // --- Single Page Application (SPA) Logic ---
+
+        const appContainer = document.getElementById('app-container');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const mobileOverlay = document.getElementById('mobile-menu-overlay');
+
+        // Page content definitions
+        const pages = {
+            'home': () => `
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-8" data-tour-id="homepage-title">The Blog: Intelligent Code Design</h1>
+                
+                <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Post 1: State Management -->
+                    <article class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden" data-tour-id="blog-post-1">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-blue-600 uppercase mb-2 block">Frameworks</span>
+                            <h2 class="text-xl font-bold text-gray-900 mb-3">Redux vs. Zustand: A Modern State Battle</h2>
+                            <p class="text-gray-600 mb-4">We dive deep into how modern frameworks manage state. Learn why immutability is key and when to choose a lightweight solution.</p>
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
+                                Read More
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Post 2: Microservices -->
+                    <article class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden" data-tour-id="blog-post-2">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-green-600 uppercase mb-2 block">Architecture</span>
+                            <h2 class="text-xl font-bold text-gray-900 mb-3">Designing Resilient Microservices with Go</h2>
+                            <p class="text-gray-600 mb-4">A guide to developing loosely coupled services that communicate effectively and handle failures gracefully.</p>
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
+                                Read More
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Post 3: AI in Development -->
+                    <article class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden" data-tour-id="blog-post-3">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-purple-600 uppercase mb-2 block">AI/ML</span>
+                            <h2 class="text-xl font-bold text-gray-900 mb-3">LLMs: The Next Code Copilot Generation</h2>
+                            <p class="text-gray-600 mb-4">Exploring how Large Language Models are reshaping the developer workflow and boosting productivity.</p>
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
+                                Read More
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </a>
+                        </div>
+                    </article>
+                </section>
+                
+                <div class="mt-12 text-center" data-tour-id="homepage-cta">
+                    <p class="text-gray-700 text-lg mb-4">Ready to level up your skills? Check out our packages!</p>
+                    <a href="#packages" onclick="navigate('packages')" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg transition duration-300">
+                        View Educational Packages
+                    </a>
+                </div>
+            `,
+            'packages': () => `
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-10 text-center" data-tour-id="packages-title">Educational Packages for Developers</h1>
+                <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">Master modern development frameworks, design patterns, and cloud deployment with our comprehensive courses.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Basic Package -->
+                    <div class="bg-white rounded-xl shadow-2xl p-8 flex flex-col items-center transform hover:scale-[1.02] transition duration-500" data-tour-id="package-basic">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Essentials Pack</h2>
+                        <p class="text-4xl font-extrabold text-blue-600 mb-6">$49<span class="text-lg font-medium text-gray-500">/mo</span></p>
+                        <ul class="text-gray-600 space-y-3 mb-8 text-left w-full">
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Access to 5 Core Courses</li>
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Monthly Code Review Articles</li>
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586l-1.293-1.293z" clip-rule="evenodd"></path></svg>No Live Q&A Sessions</li>
+                        </ul>
+                        <button onclick="navigate('checkout', { package: 'Basic' })" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md" data-tour-id="packages-buy-button-basic">
+                            Start Learning
+                        </button>
+                    </div>
+
+                    <!-- Pro Package (Highlighted) -->
+                    <div class="bg-white rounded-xl shadow-2xl shadow-blue-300 p-8 flex flex-col items-center transform scale-105 transition duration-500 ring-4 ring-blue-600" data-tour-id="package-pro">
+                        <span class="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">Most Popular</span>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Pro Developer</h2>
+                        <p class="text-5xl font-extrabold text-blue-600 mb-6">$99<span class="text-lg font-medium text-gray-500">/mo</span></p>
+                        <ul class="text-gray-700 space-y-3 mb-8 text-left w-full">
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg><span class="font-semibold">Full Course Library Access</span></li>
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Weekly Live Q&A and Mentoring</li>
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Priority Support Access</li>
+                        </ul>
+                        <button onclick="navigate('checkout', { package: 'Pro' })" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-xl shadow-blue-200" data-tour-id="packages-buy-button-pro">
+                            Get Pro Access
+                        </button>
+                    </div>
+
+                    <!-- Enterprise Package -->
+                    <div class="bg-white rounded-xl shadow-2xl p-8 flex flex-col items-center transform hover:scale-[1.02] transition duration-500" data-tour-id="package-enterprise">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Enterprise Team</h2>
+                        <p class="text-4xl font-extrabold text-blue-600 mb-6">$499<span class="text-lg font-medium text-gray-500">/mo</span></p>
+                        <ul class="text-gray-600 space-y-3 mb-8 text-left w-full">
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Everything in Pro</li>
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg><span class="font-semibold">Dedicated Team Onboarding</span></li>
+                            <li class="flex items-start"><svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 14.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Custom Learning Path Consulting</li>
+                        </ul>
+                        <button onclick="navigate('checkout', { package: 'Enterprise' })" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md" data-tour-id="packages-buy-button-enterprise">
+                            Contact Sales
+                        </button>
+                    </div>
+
+                </div>
+            `,
+            'checkout': (params) => {
+                const packageName = params.package || 'Selected Package';
+                return `
+                    <div class="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-2xl" data-tour-id="checkout-card">
+                        <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center" data-tour-id="checkout-title">Finalize Your Order</h1>
+                        
+                        <div class="mb-6 p-4 border border-blue-200 bg-blue-50 rounded-lg" data-tour-id="order-summary">
+                            <p class="text-lg font-semibold text-gray-700">Package:</p>
+                            <p id="checkout-package-name" class="text-2xl font-extrabold text-blue-600">${packageName}</p>
+                            <p class="text-sm text-gray-500 mt-2">Price will be confirmed on the next step.</p>
+                        </div>
+                        
+                        <form id="checkout-form" onsubmit="event.preventDefault(); showConfirmation(event);">
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                <input type="email" id="email" name="email" required placeholder="you@example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150" data-tour-id="checkout-email-input">
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input type="text" id="name" name="name" required placeholder="John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150" data-tour-id="checkout-name-input">
+                            </div>
+
+                            <div class="mb-6">
+                                <label for="payment" class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                                <select id="payment" name="payment" required class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 transition duration-150" data-tour-id="checkout-payment-select">
+                                    <option value="">Select an option</option>
+                                    <option value="card">Credit Card (Simulated)</option>
+                                    <option value="paypal">PayPal (Simulated)</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="w-full py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition duration-300 shadow-lg" data-tour-id="checkout-submit">
+                                Confirm & Pay (Simulated)
+                            </button>
+                        </form>
+                    </div>
+                `;
+            },
+            'confirmation': (params) => `
+                <div class="max-w-lg mx-auto bg-white p-10 rounded-xl shadow-2xl text-center" data-tour-id="confirmation-card">
+                    <svg class="w-20 h-20 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-4" data-tour-id="confirmation-title">Order Confirmed!</h1>
+                    <p class="text-xl text-gray-700 mb-2">Thank you, <span class="font-semibold">${params.name}!</span></p>
+                    <p class="text-gray-600 mb-8">Your subscription to the <span class="font-bold text-blue-600">${params.package}</span> package is now active. A welcome email has been sent to ${params.email}.</p>
+                    <a href="#home" onclick="navigate('home')" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300" data-tour-id="confirmation-back-home">
+                        Back to the Blog
+                    </a>
+                </div>
+            `
+        };
+
+        /**
+         * Parses the hash fragment and returns the page name and parameters.
+         */
+        function parseHash() {
+            const hash = window.location.hash.substring(1); // Remove '#'
+            if (!hash) return { page: 'home', params: {} };
+
+            // Supports 'page' or 'page?key=value&key2=value2'
+            const [page, queryString] = hash.split('?');
+            
+            const params = {};
+            if (queryString) {
+                queryString.split('&').forEach(pair => {
+                    const [key, value] = pair.split('=').map(decodeURIComponent);
+                    params[key] = value;
+                });
+            }
+
+            // Ensure the page exists, otherwise default to home
+            const finalPage = pages.hasOwnProperty(page) ? page : 'home';
+            return { page: finalPage, params };
+        }
+
+        /**
+         * Renders the correct page content based on the hash fragment.
+         */
+        function renderPage() {
+            const { page, params } = parseHash();
+            const contentGenerator = pages[page];
+
+            // Render the content
+            appContainer.innerHTML = contentGenerator(params);
+            
+            // Close mobile menu if it was open
+            closeMobileMenu();
+
+            // Scroll to top for a better page transition feel
+            window.scrollTo(0, 0);
+        }
+
+        /**
+         * Updates the browser history and triggers page rendering.
+         * @param {string} pageName - The name of the page to navigate to.
+         * @param {Object} [params={}] - Optional parameters to include in the URL query string.
+         */
+        function navigate(pageName, params = {}) {
+            // Convert params object to query string
+            const queryString = Object.keys(params).map(key => 
+                `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+            ).join('&');
+
+            // Construct new hash
+            const newHash = `#${pageName}${queryString ? '?' + queryString : ''}`;
+
+            // Update browser history (important for single-page apps)
+            window.history.pushState(null, '', newHash);
+
+            // Render the new page
+            renderPage();
+        }
+
+        /**
+         * Handles the simulated form submission and navigates to the confirmation page.
+         */
+        function showConfirmation(event) {
+            const form = event.target;
+            const data = new FormData(form);
+            
+            // Get data from form and the package name from the summary
+            const packageName = document.getElementById('checkout-package-name').textContent;
+            
+            // Create parameters for the confirmation page
+            const params = {
+                package: packageName,
+                email: data.get('email'),
+                name: data.get('name')
+            };
+
+            // Navigate to the confirmation page
+            navigate('confirmation', params);
+        }
+
+        // --- Mobile Menu Toggle Logic ---
+
+        function toggleMobileMenu() {
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileOverlay.classList.toggle('opacity-0', !isOpen);
+            mobileOverlay.classList.toggle('opacity-50', isOpen);
+            mobileOverlay.classList.toggle('pointer-events-none', !isOpen);
+        }
+
+        function closeMobileMenu() {
+             mobileMenu.classList.remove('open');
+             mobileOverlay.classList.remove('opacity-50');
+             mobileOverlay.classList.add('opacity-0');
+             mobileOverlay.classList.add('pointer-events-none');
+        }
+
+        // Event Listeners
+        hamburgerButton.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+        
+        // Close menu when a link inside it is clicked (using event delegation)
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' || e.target.closest('A')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Listen for browser back/forward buttons
+        window.addEventListener('hashchange', renderPage);
+
+        // Initial load: render the current hash or default to home
+        window.addEventListener('DOMContentLoaded', () => {
+            // If no hash is present, set the default to #home
+            if (!window.location.hash) {
+                navigate('home');
+            } else {
+                renderPage();
+            }
+        });
+    </script>
+    
+    <!-- User identification start -->
+    <script>
+        window.usetifulTags = {      
+            userId : "001",  // This identifies the user and should be unique. Change it
+            firstName : "Egroj",  // This property defines user’s first name. Change it
+            lastName : "Onac" // This property defines user’s last name. Change it     
+        };</script>
+        <!-- User identification end -->
+        <!-- Script start -->
+        <script>
+        (function (w, d, s) {
+            var a = d.getElementsByTagName('head')[0];
+            var r = d.createElement('script');
+            r.async = 1;
+            r.src = s;
+            r.setAttribute('id', 'usetifulScript');
+            r.dataset.token = "07e53600a22882dabf19c4bb29230516";  // This is your unique token. Don’t change it.
+            a.appendChild(r);
+        })(window, document, "https://www.usetiful.com/dist/usetiful.js");
+    </script>
+    <!-- Script end -->
+</body>
+</html>
